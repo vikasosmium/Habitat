@@ -1,0 +1,26 @@
+@model RegisterFormModel
+@{
+    ViewData["Title"] = "Create account";
+}
+<section class="account-page">
+    <p class="eyebrow">Welcome to Habitat</p>
+    <h1>Create your account</h1>
+    <p>One account lets you post a place or contact its owner.</p>
+    <form asp-action="Register" method="post">
+        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <div class="form-field"><label asp-for="Name">Your name</label><input asp-for="Name" autocomplete="name"
+                                                                                  placeholder="e.g. Asha Kumar" /><span asp-validation-for="Name"></span></div>
+            <div class="form-field"><label asp-for="LoginId">Login ID</label><input asp-for="LoginId"
+                                                                                        autocomplete="username" placeholder="Choose a login ID" /><span asp-validation-for="LoginId"></span>
+            </div>
+            <div class="form-field"><label asp-for="Password">Password</label><input asp-for="Password"
+                                                                                         autocomplete="new-password" placeholder="At least 6 characters" /><span
+                asp-validation-for="Password"></span></div>
+                <div class="form-field"><label asp-for="ConfirmPassword">Confirm password</label><input
+                    asp-for="ConfirmPassword" autocomplete="new-password" /><span
+                    asp-validation-for="ConfirmPassword"></span></div>
+                    <button class="button button-dark" type="submit">Create account</button>
+                </form>
+                <p>Already have an account? <a asp-action="Login">Sign in</a></p>
+            </section>

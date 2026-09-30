@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Flat.Models
+@inject SignInManager<ApplicationUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var displayName = User.FindFirst("DisplayName")?.Value ?? User.Identity?.Name ?? "Account";
+    var initial = displayName.Length > 0 ? displayName[..1].ToUpperInvariant() : "A";
+    <details class="profile-menu">
+        <summary class="profile-avatar" aria-label="Open profile menu" title="@displayName">@initial</summary>
+        <div class="profile-dropdown">
+            <strong>@displayName</strong>
+            <a asp-controller="Properties" asp-action="Mine">My properties</a>
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit">Sign out</button>
+            </form>
+        </div>
+    </details>
+}
+else
+{
+    <a class="nav-account" asp-controller="Account" asp-action="Login">Sign in</a>
+}

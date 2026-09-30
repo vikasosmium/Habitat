@@ -1,0 +1,55 @@
+@model PropertyListing
+@{
+    ViewData["Title"] = Model.Title;
+    var whatsappNumber = Model.ContactPhone.Replace("+", "").Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")",
+"");
+}
+
+<section class="detail-page">
+    <a class="back-link" asp-action="Index">← Back to places</a>
+    @if (Model.Photos.Count > 0)
+    {
+        <div class="detail-gallery">
+            @foreach (var photo in Model.Photos)
+            {
+                <img src="@photo.ImagePath" alt="Photo of @Model.Title" />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="detail-image"><img
+            src="@(Model.ImageUrl ?? "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=85")"
+            alt="@Model.Title" /></div>
+        }
+        <div class="detail-layout">
+            <article class="detail-copy">
+                <p class="eyebrow">@Model.ListingType · @Model.PropertyType</p>
+                <h1>@Model.Title</h1>
+                <p class="detail-location">@Model.Locality, @Model.City</p>
+                <p class="detail-address">@Model.Address</p>
+                @if (!string.IsNullOrWhiteSpace(Model.MapLink))
+                {
+                    <a class="map-link" href="@Model.MapLink" target="_blank" rel="noopener noreferrer">Open property on map</a>
+                }
+                <div class="detail-facts"><span>@Model.Bedrooms bedrooms</span><span>@Model.Bathrooms
+                    bathrooms</span><span>@Model.AreaSqFt sq ft</span><span>@Model.Furnishing</span></div>
+                    <h2>About this place</h2>
+                    <p class="detail-description">@Model.Description</p>
+                    @if (Model.ListingType == "Rent")
+                    {
+                        <p class="deposit-note">Security deposit: ₹@Model.Deposit.ToString("N0")</p>
+                    }
+                </article>
+                <aside class="contact-panel">
+                    <p class="eyebrow">The asking price</p>
+                    <p class="detail-price">₹@Model.Price.ToString("N0") <span>@(Model.ListingType == "Rent" ? "/ month" :
+                                                                 "")</span></p>
+                        <a class="button button-dark contact-button"
+                           href="https://wa.me/@whatsappNumber?text=Hi%2C%20I%20am%20interested%20in%20your%20property">Message
+                            owner</a>
+                            <a class="call-owner" href="tel:@Model.ContactPhone">Call @Model.ContactPhone</a>
+                            <p class="contact-number">@Model.ContactPhone</p>
+                        </aside>
+                    </div>
+                </section>

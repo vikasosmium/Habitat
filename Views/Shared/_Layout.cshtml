@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Habitat</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body>
+    <header>
+        <nav class="site-nav">
+            <div class="nav-inner">
+                <a class="brand" asp-controller="Properties" asp-action="Index"><span class="brand-mark">H</span>
+                    habitat<span class="brand-period">.</span></a>
+                    <div class="nav-links">
+                        <a class="nav-browse" asp-controller="Properties" asp-action="Index">Browse properties</a>
+                        <partial name="_LoginPartial" />
+                        <a class="nav-list-link" asp-controller="Properties" asp-action="Create">Post a property <span
+                            aria-hidden="true">+</span></a>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <main role="main">
+                @RenderBody()
+            </main>
+            <footer class="site-footer">
+                <div class="footer-inner"><a class="brand" asp-controller="Properties" asp-action="Index"><span
+                    class="brand-mark">H</span> habitat<span class="brand-period">.</span></a><span>Homes and rooms,
+                    posted by owners.</span></div>
+                </footer>
+                <script src="~/js/site.js" asp-append-version="true"></script>
+                @await RenderSectionAsync("Scripts", required: false)
+            </body>
+
+        </html>

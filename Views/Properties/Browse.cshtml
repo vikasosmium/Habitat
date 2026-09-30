@@ -1,0 +1,95 @@
+@model PropertySearchViewModel
+@{
+    ViewData["Title"] = "Find a property";
+    var firstResult = Model.TotalCount == 0 ? 0 : (Model.Page - 1) * 50 + 1;
+    var lastResult = Math.Min(Model.Page * 50, Model.TotalCount);
+}
+
+<section class="browse-page">
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="notice-success" role="status">@successMessage</div>
+    }
+    <div class="browse-heading">
+        <div>
+            <p class="eyebrow">Habitat properties</p>
+            <h1>Find a place to live.</h1>
+            <p>Browse homes, rooms, flats and more posted by owners.</p>
+        </div>
+        <a class="button button-dark post-button" asp-controller="Properties" asp-action="Create">Post a property <span
+            aria-hidden="true">+</span></a>
+        </div>
+
+        <form method="get" asp-action="Index" class="simple-search">
+            <label class="visually-hidden" for="searchTerm">Search by area or property name</label>
+            <input id="searchTerm" name="searchTerm" value="@Model.SearchTerm"
+                   placeholder="Enter a city, neighbourhood or property name" />
+            <label class="visually-hidden" for="listingType">Listing type</label>
+            <select id="listingType" name="listingType">
+                <option value="">Rent or buy</option>
+                <option value="Rent" selected="@(Model.ListingType == "Rent" ? "selected" : null)">For rent</option>
+                <option value="Sale" selected="@(Model.ListingType == "Sale" ? "selected" : null)">For sale</option>
+            </select>
+            <button class="button button-dark" type="submit">Search</button>
+        </form>
+
+        <div class="browse-results-heading">
+            <div>
+                <h2>Latest properties</h2>
+                <p>@Model.TotalCount @(Model.TotalCount == 1 ? "property" : "properties")</p>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.SearchTerm) || !string.IsNullOrWhiteSpace(Model.ListingType))
+            {
+                <a class="clear-search" asp-action="Index">Clear search</a>
+            }
+        </div>
+
+        @if (Model.Listings.Count == 0)
+        {
+            <div class="browse-empty">
+                <h3>No properties found</h3>
+                <p>Try a different area, or be the first to post a property.</p><a class="button button-outline"
+                                                                                   asp-action="Create">Post the first property</a>
+            </div>
+        }
+        else
+        {
+            <div class="simple-listing-grid">
+                @foreach (var listing in Model.Listings)
+                {
+                    var coverPhoto = listing.Photos.FirstOrDefault()?.ImagePath ?? listing.ImageUrl ??
+         "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80";
+                    <article class="simple-listing-card">
+                        <a class="simple-listing-photo" asp-action="Details" asp-route-id="@listing.Id"><img src="@coverPhoto"
+                                                                                                                 alt="Photo of @listing.Title" loading="lazy" /><span>@(listing.ListingType == "Rent" ? "For rent" :
+                                                                                                                 "For sale")</span></a>
+                            <div class="simple-listing-copy">
+                                <p class="simple-listing-location">@listing.Locality, @listing.City</p>
+                                <h3><a asp-action="Details" asp-route-id="@listing.Id">@listing.Title</a></h3>
+                                <p class="simple-listing-facts">@listing.PropertyType <span>·</span> @listing.Bedrooms rooms
+                                    <span>·</span> @listing.Bathrooms bathrooms</p>
+                                    <div class="simple-listing-bottom"><strong>₹@listing.Price.ToString("N0")<small>@(listing.ListingType ==
+                                                "Rent" ? " / month" : "")</small></strong><a asp-action="Details"
+                                                                                     asp-route-id="@listing.Id">View property <span aria-hidden="true">→</span></a></div>
+                                    </div>
+                                </article>
+                            }
+                        </div>
+                        @if (Model.TotalPages > 1)
+                        {
+                            <nav class="simple-pagination" aria-label="Property pages">
+                                @if (Model.Page > 1)
+                                {
+                                    <a asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-listingType="@Model.ListingType"
+                                       asp-route-page="@(Model.Page - 1)">Previous</a>
+                                }
+                                <span>Page @Model.Page of @Model.TotalPages</span>
+                                @if (Model.Page < Model.TotalPages)
+                                {
+                                    <a asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-listingType="@Model.ListingType"
+                                       asp-route-page="@(Model.Page + 1)">Next</a>
+                                }
+                            </nav>
+                        }
+                    }
+                </section>

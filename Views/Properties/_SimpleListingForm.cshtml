@@ -1,0 +1,64 @@
+@model PropertyListing
+@{
+    var existingPhotoCount = ViewData["ExistingPhotoCount"] is int count ? count : 0;
+}
+<div asp-validation-summary="All" class="validation-summary"></div>
+<div class="posting-grid">
+    <div class="form-field"><label asp-for="Title">Property name</label><input asp-for="Title"
+                                                                                   placeholder="Sunny room near the metro" /><span asp-validation-for="Title"></span></div>
+        <div class="form-field"><label asp-for="ListingType">Available for</label><select asp-for="ListingType">
+            <option value="Rent">Rent</option>
+            <option value="Sale">Sale</option>
+        </select><span asp-validation-for="ListingType"></span></div>
+        <div class="form-field"><label asp-for="PropertyType">Property type</label><select asp-for="PropertyType">
+            <option>Room</option>
+            <option>1 RK</option>
+            <option>Flat</option>
+            <option>House</option>
+            <option>PG</option>
+            <option>Commercial</option>
+            <option>Land</option>
+            <option>Other</option>
+        </select><span asp-validation-for="PropertyType"></span></div>
+        <div class="form-field"><label asp-for="Price">@(Model.ListingType == "Sale" ? "Price (₹)" : "Monthly rent (₹)")</label><input asp-for="Price" type="number" min="1" /><span asp-validation-for="Price"></span></div>
+        <div class="form-field"><label asp-for="City">City</label><input asp-for="City" placeholder="Bengaluru" /><span
+            asp-validation-for="City"></span></div>
+            <div class="form-field"><label asp-for="Locality">Area or neighbourhood</label><input asp-for="Locality"
+                                                                                                      placeholder="Indiranagar" /><span asp-validation-for="Locality"></span></div>
+                <div class="form-field form-wide"><label asp-for="Address">Property address</label><input asp-for="Address"
+                                                                                                              placeholder="Street, building or a nearby landmark" /><span asp-validation-for="Address"></span></div>
+                    <div class="form-field form-wide location-field">
+                        <label asp-for="MapLink">Map link <span>(optional)</span></label>
+                        <div class="map-input-row"><input asp-for="MapLink" placeholder="Paste a Google Maps link" /><button
+                            type="button" class="button button-outline" id="use-current-location">Use my location</button></div>
+                            <span asp-validation-for="MapLink"></span>
+                            <p id="location-message" class="field-help" role="status">Your browser will ask permission before sharing your
+                                location.</p>
+                            </div>
+                            <div class="form-field"><label asp-for="Bedrooms">Bedrooms or rooms</label><input asp-for="Bedrooms" type="number"
+                                                                                                                  min="0" max="30" /><span asp-validation-for="Bedrooms"></span></div>
+                                <div class="form-field"><label asp-for="Bathrooms">Bathrooms</label><input asp-for="Bathrooms" type="number" min="0"
+                                                                                                               max="30" /><span asp-validation-for="Bathrooms"></span></div>
+                                    <div class="form-field"><label asp-for="AreaSqFt">Size (sq ft)</label><input asp-for="AreaSqFt" type="number"
+                                                                                                                     min="0" /><span asp-validation-for="AreaSqFt"></span></div>
+                                        <div class="form-field"><label asp-for="Furnishing">Furnishing</label><select asp-for="Furnishing">
+                                            <option>Furnished</option>
+                                            <option>Semi-furnished</option>
+                                            <option>Unfurnished</option>
+                                        </select><span asp-validation-for="Furnishing"></span></div>
+                                        <div class="form-field"><label asp-for="Deposit">Security deposit (₹)</label><input asp-for="Deposit" type="number"
+                                                                                                                                min="0" /><span asp-validation-for="Deposit"></span></div>
+                                            <div class="form-field"><label asp-for="ContactPhone">Contact phone</label><input asp-for="ContactPhone" type="tel"
+                                                                                                                                  placeholder="+91 98765 43210" /><span asp-validation-for="ContactPhone"></span></div>
+                                                <div class="form-field form-wide"><label for="photos">Property photos <span>(up to five)</span></label><input
+                                                    id="photos" name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple
+                                                    data-existing-count="@existingPhotoCount" />
+                                                    <p class="field-help">Choose JPG, PNG or WebP photos. Each photo must be under 5 MB. Videos are not accepted.
+                                                    </p>
+                                                    <div id="photo-preview" class="photo-preview" aria-live="polite"></div>
+                                                </div>
+                                                <div class="form-field form-wide"><label asp-for="Description">About this property</label><textarea
+                                                    asp-for="Description" rows="4"
+                                                    placeholder="Share a few helpful details about the property."></textarea><span
+                                                    asp-validation-for="Description"></span></div>
+                                                </div>

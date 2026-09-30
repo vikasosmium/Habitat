@@ -1,0 +1,28 @@
+@model PropertyListing
+@{
+    ViewData["Title"] = "Edit listing";
+    var existingPhotoCount = ViewData["ExistingPhotoCount"] is int count ? count : Model.Photos.Count;
+    ViewData["ExistingPhotoCount"] = existingPhotoCount;
+}
+<section class="form-page">
+    <a class="back-link" asp-action="Mine">← My listings</a>
+    <div class="form-heading">
+        <p class="eyebrow">Your property</p>
+        <h1>Edit listing.</h1>
+    </div>
+    @if (Model.Photos.Count > 0)
+    {
+        <div class="saved-photos">
+            <p>Current photos</p>
+            <div>@foreach (var photo in Model.Photos) {
+                <img src="@photo.ImagePath" alt="Current property photo" />
+            }
+        </div>
+    </div>
+}
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data" class="property-form">
+    <partial name="_SimpleListingForm" model="Model" />
+    <div class="form-actions"><a class="button button-outline" asp-action="Mine">Cancel</a><button
+        class="button button-dark" type="submit">Save changes <span aria-hidden="true">→</span></button></div>
+    </form>
+</section>
