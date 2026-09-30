@@ -8,22 +8,26 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Get source code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x' # Set to 9.0.x if you are targeting .NET 9
+          dotnet-version: '8.0.x' # Use '9.0.x' if your Flat.csproj targets net9.0
 
-      - name: Build and Publish
-        run: dotnet publish -c Release -o ./publish
+      - name: Publish Web App
+        run: dotnet publish Flat.csproj -c Release -o ./publish-output
 
-      - name: Upload to MonsterASP
+      - name: Deploy to MonsterASP via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./publish/
+          protocol: ftps
+          security: loose
+          port: 21
+          local-dir: ./publish-output/
           server-dir: /wwwroot/
+          dangerous-clean-slate: false
