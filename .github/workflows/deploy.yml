@@ -30,4 +30,4 @@ jobs:
           port: 21
           local-dir: ./publish-output/
           server-dir: /wwwroot/
-          dangerous-clean-slate: false
+          dangerous-clean-slate: true
